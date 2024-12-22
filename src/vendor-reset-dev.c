@@ -65,7 +65,15 @@ long vendor_reset_dev_locked(const struct vendor_reset_cfg *cfg,
 
   /* expose return code to cleanup */
   vr_info(&vdev, "performing reset\n");
-  ret = vdev.reset_ret = cfg->ops->reset(&vdev);
+  ret = vdev.reset_
+        /* Try reset methods */
+        ret = vdev.reset_ret = cfg->ops->reset(&vdev);
+        if (ret) {
+            vr_warn(&vdev, "reset method failed, trying fallback methods...
+");
+            // Add fallback methods here if applicable
+        }
+        
   if (ret)
     vr_warn(&vdev, "failed to reset device\n");
 

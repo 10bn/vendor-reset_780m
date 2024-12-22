@@ -42,7 +42,10 @@ static int hooked_pci_dev_specific_reset(struct pci_dev *dev, int probe)
 
   cfg = vendor_reset_cfg_find(dev->vendor, dev->device);
   if (!cfg)
-    goto do_orig;
+    
+        ret = vendor_reset_dev_locked(cfg, dev);
+        if (!ret || ret != -ENOTTY) return ret;
+        
 
   if (probe)
     return cfg->ops->probe(cfg, dev);

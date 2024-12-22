@@ -90,8 +90,7 @@ Place, Suite 330, Boston, MA 02111-1307 USA
     {PCI_VENDOR_ID_ATI, 0x731a, op, DEVICE_INFO(AMD_NAVI10)}, \
     {PCI_VENDOR_ID_ATI, 0x731b, op, DEVICE_INFO(AMD_NAVI10)}, \
     {PCI_VENDOR_ID_ATI, 0x731e, op, DEVICE_INFO(AMD_NAVI10)}, \
-    {PCI_VENDOR_ID_ATI, 0x731f, op, DEVICE_INFO(AMD_NAVI10)},  \
-    {PCI_VENDOR_ID_ATI, 0x15BF, op, DEVICE_INFO(AMD_NAVI10)},
+    {PCI_VENDOR_ID_ATI, 0x731f, op, DEVICE_INFO(AMD_NAVI10)}
 
 
 #define _AMD_NAVI14(op) \
@@ -118,6 +117,7 @@ static const struct vendor_reset_cfg vendor_reset_devices[] = {
     _AMD_NAVI12(&amd_navi10_ops),
     _AMD_ARCTURUS(&amd_vega20_ops),
 
+    {0x1002, 0x15BF, &amd_navi10_ops, DEVICE_INFO(AMD_PHOENIX1)},
     /* end of array guard */
     {.vendor = 0}
 };
