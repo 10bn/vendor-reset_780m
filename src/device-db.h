@@ -19,6 +19,7 @@ Place, Suite 330, Boston, MA 02111-1307 USA
 #include "amd/amd.h"
 
 #define DEVICE_INFO(x) x, #x
+#define AMD_PHOENIX1 0x15BF
 
 #define _AMD_POLARIS10(op) \
     {PCI_VENDOR_ID_ATI, 0x67C0, op, DEVICE_INFO(AMD_POLARIS10)}, \

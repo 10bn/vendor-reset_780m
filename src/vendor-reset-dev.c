@@ -40,51 +40,38 @@ const struct vendor_reset_cfg * vendor_reset_cfg_find(unsigned int vendor,
   return cfg;
 }
 
-long vendor_reset_dev_locked(const struct vendor_reset_cfg *cfg,
-    struct pci_dev *dev)
-{
-  struct vendor_reset_dev vdev =
-  {
-    .cfg  = cfg,
-    .pdev = dev,
-    .info = cfg->info
-  };
-  int ret;
+long vendor_reset_dev_locked(const struct vendor_reset_cfg *cfg, struct pci_dev *dev) {
+    struct vendor_reset_dev vdev = {
+        .cfg = cfg,
+        .pdev = dev,
+        .info = cfg->info,
+    };
+    int ret;
 
-  vr_info(&vdev, "version %d.%d\n",
-      cfg->ops->version.major,
-      cfg->ops->version.minor);
+    vr_info(&vdev, "version %d.%d\n",
+            cfg->ops->version.major,
+            cfg->ops->version.minor);
 
-  if (cfg->ops->pre_reset)
-  {
-    vr_info(&vdev, "performing pre-reset\n");
-    ret = cfg->ops->pre_reset(&vdev);
-    if (ret)
-      return ret;
-  }
+    if (cfg->ops->pre_reset) {
+        vr_info(&vdev, "performing pre-reset\n");
+        ret = cfg->ops->pre_reset(&vdev);
+        if (ret)
+            return ret;
+    }
 
-  /* expose return code to cleanup */
-  vr_info(&vdev, "performing reset\n");
-  ret = vdev.reset_
-        /* Try reset methods */
-        ret = vdev.reset_ret = cfg->ops->reset(&vdev);
-        if (ret) {
-            vr_warn(&vdev, "reset method failed, trying fallback methods...
-");
-            // Add fallback methods here if applicable
-        }
-        
-  if (ret)
-    vr_warn(&vdev, "failed to reset device\n");
+    vr_info(&vdev, "performing reset\n");
+    ret = vdev.reset_ret = cfg->ops->reset(&vdev);
+    if (ret) {
+        vr_warn(&vdev, "reset method failed, trying fallback methods...\n");
+    }
 
-  if (cfg->ops->post_reset)
-  {
-    vr_info(&vdev, "performing post-reset\n");
-    ret = cfg->ops->post_reset(&vdev);
-  }
+    if (cfg->ops->post_reset) {
+        vr_info(&vdev, "performing post-reset\n");
+        ret = cfg->ops->post_reset(&vdev);
+    }
 
-  vr_info(&vdev, "reset result = %d\n", ret);
-  return ret;
+    vr_info(&vdev, "reset result = %d\n", ret);
+    return ret;
 }
 
 long vendor_reset_dev(const struct vendor_reset_cfg *cfg,
